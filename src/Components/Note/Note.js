@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import deleteIcon from "../../assets/delete.svg";
 import Draggable from 'react-draggable';
@@ -50,13 +50,16 @@ function Note(props) {
     debounce(() => props.updateText(text, id));
   };
 
+  const [isDraggingEnabled, setIsDraggingEnabled] = useState(true);
   return (
-    <Draggable>
+    <Draggable disabled={!isDraggingEnabled}>
     <div className="note" style={{ backgroundColor: props.note.color }}>
       <textarea
         className="note_text"
         defaultValue={props.note.text}
         onChange={(event) => updateText(event.target.value, props.note.id)}
+        onFocus={() => setIsDraggingEnabled(false)}
+        onBlur={() => setIsDraggingEnabled(true)}
       />
       <div className="note_footer">
         <p>{formatDate(props.note.time)}</p>
